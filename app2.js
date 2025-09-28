@@ -23,7 +23,7 @@ async function connectWallet() {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             return accounts[0];
         } catch (err) {
-            alert('请授权钱包访问');
+            alert('Please authorize wallet access');
             return null;
         }
     } else {
@@ -34,7 +34,7 @@ async function connectWallet() {
 
 async function loadLotteryInfo() {
     if (!window.ethereum) {
-        alert('请先安装MetaMask或其他Web3钱包扩展');
+        alert('Please install MetaMask or other Web3 wallet extension first');
         return;
     }
     // Connect wallet
@@ -53,32 +53,32 @@ async function loadLotteryInfo() {
         const winnersWinning = result[2];
 
         const xplAmount = Number(web3.utils.fromWei(info[6], 'ether'));
-        document.getElementById('jackpot-amount').innerText = `${xplAmount.toLocaleString('zh-CN', { maximumFractionDigits: 4, minimumFractionDigits: 4 })} XPL ($${(xplAmount * 1.50).toLocaleString('zh-CN', { maximumFractionDigits: 2, minimumFractionDigits: 2 })})`;
+        document.getElementById('jackpot-amount').innerText = `${xplAmount.toLocaleString('en-US', { maximumFractionDigits: 4, minimumFractionDigits: 4 })} XPL ($${(xplAmount * 1.50).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })})`;
 
         // Info section
         const lastDraw = new Date(Number(info[4]) * 1000);
-        document.getElementById('last-draw-time').innerText = lastDraw.toLocaleString('zh-CN');
-        document.getElementById('total-weight').innerText = Number(info[1]).toLocaleString('zh-CN');
-        document.getElementById('user-weight').innerText = Number(info[0]).toLocaleString('zh-CN');
+        document.getElementById('last-draw-time').innerText = lastDraw.toLocaleString('en-US');
+        document.getElementById('total-weight').innerText = Number(info[1]).toLocaleString('en-US');
+        document.getElementById('user-weight').innerText = Number(info[0]).toLocaleString('en-US');
 
         // Winner list
         const winnersList = document.getElementById('winners-list');
         winnersList.innerHTML = '';
         if (winners.length === 0) {
-            winnersList.innerHTML = '<div class="winner-placeholder">暂无数据</div>';
+            winnersList.innerHTML = '<div class="winner-placeholder">No data available</div>';
         } else {
             for (let i = 0; i < winners.length; i++) {
                 const addr = winners[i];
                 const winAmount = winnersWinning[i] ? web3.utils.fromWei(winnersWinning[i], 'ether') : 0;
                 const div = document.createElement('div');
                 div.className = 'winner-address fomo';
-                div.innerHTML = `<a href="${CHAIN_EXPLORER}${addr}" target="_blank" title="在浏览器中查看">${addr.slice(0,6)}...${addr.slice(-4)}</a> <span class="win-amount">+${Number(winAmount).toLocaleString('zh-CN', {maximumFractionDigits:4})} XPL ($${(winAmount * 1.5).toLocaleString('zh-CN', {maximumFractionDigits:2, minimumFractionDigits:2})})</span>`;
+                div.innerHTML = `<a href="${CHAIN_EXPLORER}${addr}" target="_blank" title="View in browser">${addr.slice(0,6)}...${addr.slice(-4)}</a> <span class="win-amount">+${Number(winAmount).toLocaleString('en-US', {maximumFractionDigits:4})} XPL ($${(winAmount * 1.5).toLocaleString('en-US', {maximumFractionDigits:2, minimumFractionDigits:2})})</span>`;
                 winnersList.appendChild(div);
             }
         }
     } catch (e) {
         console.error(e);
-        alert('获取合约信息失败，请检查网络和合约地址');
+        alert('Failed to fetch contract information. Please check your network and contract address.');
     }
 }
 
